@@ -53,7 +53,7 @@ class Main extends Component{
                         <th scope="row">{work.id.toString()}</th>
                         <td>{work.name}</td>
                         <td>{work.owner}</td>
-                        <td><Router><Link to='/bid' >Click to login</Link><Route path="/bid" component={Bid} /></Router></td>
+                        <td><Router><Link to='/bid' target-"_blank" >Click to login</Link><Route path="/bid" component={Bid} /></Router></td>
                       </tr>
                      );
                    })}
