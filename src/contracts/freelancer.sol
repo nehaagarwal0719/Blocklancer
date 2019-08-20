@@ -9,7 +9,6 @@ contract freelancer{
     }
 
     struct bid{
-        //uint work_id;
         uint bid_id;
         string name;
         string message;
@@ -22,7 +21,7 @@ contract freelancer{
     uint public bidCount=0;
     
     mapping (uint=>work) public works;
-    mapping (uint => bid) public bids;
+    mapping (uint=>bid) public bids;
     
     
     event workCreated(

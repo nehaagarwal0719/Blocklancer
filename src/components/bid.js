@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Web3 from 'web3';
 import freelancer from '../abis/freelancer.json';
+import BidMain from './bidmain.js';
 
 class bid extends Component{
 
@@ -45,8 +46,6 @@ async loadweb3(){
         bids:[...this.state.bids,bid]
       })      
      }
-
-
      this.setState({loading:false})
      console.log(this.state.bids)
       }
@@ -78,64 +77,14 @@ createBid(name,message,time,price) {
 	{
     return(
  		
- 		<div id="content">
-            <form onSubmit={(event) => {
-          			event.preventDefault()
-         			  const name = this.bidderName.value
-         			  const des  = this.bidderDes.value
-         			  const time = this.bidderTime.value
-         			  const price = this.bidderPrice.value
-          			  this.props.createbid(name,des,time,price)
-             }}>
-                  <div className="form-group mr-sm-2">
-                     <input
-                        id="bidderName"
-                        type="text"
-                        ref={(input) => { this.bidderName = input }}
-                        className="form-control"
-                        placeholder="Bidder Name"
-                        required />
-                        <input
-                        id="bidderDes"
-                        type="text"
-                        ref={(input) => { this.bidderDes = input }}
-                        className="form-control"
-                        placeholder="Bidder Description"
-                        required />
-                        <input
-                        id="bidderTime"
-                        type="text"
-                        ref={(input) => { this.bidderTime = input }}
-                        className="form-control"
-                        placeholder="Bidder Time"
-                        required />
-                        <input
-                        id="bidderPrice"
-                        type="text"
-                        ref={(input) => { this.bidderPrice = input }}
-                        className="form-control"
-                        placeholder="Bidder Price"
-                        required />
-                  </div>          
-                  <button type="submit" className="btn btn-primary">Bid</button>
-            </form>
-            <p>&nbsp;</p>
-            <h2>Bid List</h2>
-            <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Owner</th>
-                   </tr>
-                </thead>
-
-          </table>
-          createBid={this.createBid}
-			</div>
+ 	<div class ="container">
+      <div class="row">
+        <BidMain bids ={this.state.bids} 
+        createBid={this.createBid}
+        />
+        
+        </div>
+    </div>
     	);
 	}
 }
