@@ -2,17 +2,19 @@ import React, { Component } from 'react';
 import './App.css';
 import Web3 from 'web3';
 import freelancer from '../abis/freelancer.json';
-import BidMain from './bidmain.js';
+import Main from './main.js';
+import Bid from './bid.js';
+import { HashRouter as Router, Route, Link, Switch } from "react-router-dom";
 
-class bid extends Component{
+
+class Home extends Component {
 
 async componentWillMount(){
+   document.title = "Blocklancer"
   await this.loadweb3()
   console.log(window.web3)
   await this.loadBlockchainData()
 }
-
-
 
 async loadweb3(){
     if (window.ethereum) {
@@ -37,54 +39,56 @@ async loadweb3(){
     if(networkData){ 
      const Freelancer = web3.eth.Contract(freelancer.abi,networkData.address)
      this.setState({Freelancer})
-     const bidCount = await Freelancer.methods.bidCount().call()
-     this.setState({bidCount})
-     for(var i=1;i<=bidCount;i++){
-      const bid = await Freelancer.methods.bids(i).call()
+     const workCount = await Freelancer.methods.workCount().call()
+     this.setState({workCount})
+     for(var i=1;i<=workCount;i++){
+      const work = await Freelancer.methods.works(i).call()
       this.setState({
-        bids:[...this.state.bids,bid]
+        works:[...this.state.works,work]
       })      
      }
+
+
      this.setState({loading:false})
-     console.log(this.state.bids)
+     console.log(this.state.works)
       }
     else{
     window.alert("Contract not deployed to the detected network");
   }
 }
 
-
   constructor (props){
     super(props)
     this.state ={
       account: '',
-      bidCount:0,
-      bids:[],
+      workCount :0,
+      works :[],
       loading : true
     }
-   this.createBid = this.createBid.bind(this);
+  this.createWork = this.createWork.bind(this)
+  
+  //this.purchaseProduct = this.purchaseProduct.bind(this)
   }
-createBid(name,message,time,price) {
+
+createWork(name) {
     this.setState({ loading: true })
-    this.state.Freelancer.methods.createBid(name,message,time,price).send({ from: this.state.account })
+    this.state.Freelancer.methods.createWork(name).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
     })
   }
-	render()
-	{
-    return(
- 		
- 	<div class ="container">
+  
+  render() {
+    return (
+    <div class ="container">
       <div class="row">
-        <BidMain bids ={this.state.bids} 
-        createBid={this.createBid}
+        <Main works ={this.state.works} 
+        createWork={this.createWork}
         />
-        
         </div>
     </div>
-    	);
-	}
+    );
+  }
 }
 
-export default bid;
+export default Home;

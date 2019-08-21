@@ -1,16 +1,8 @@
 import React , {Component} from 'react';
-
-import { HashRouter as Router, Route, Link, Switch } from "react-router-dom";
-
-
-//import  { Redirect } from 'react-router-dom';
 import Bid from './bid.js';
 
 
 class BidMain extends Component{
-
-
- 
 
 	render()
 	{
@@ -20,10 +12,11 @@ class BidMain extends Component{
             <form onSubmit={(event) => {
                 event.preventDefault()
                 const name = this.bidderName.value
-                const des  = this.bidderDes.value
-                const time = this.bidderTime.value
-                const price = this.bidderPrice.value
-                  this.props.createBid(name,des,time,price)
+                const message  = this.bidderMessage.value
+                const time = window.web3.utils.hexToNumber(this.bidderTime.value)
+                const price = window.web3.utils.toWei(this.bidderPrice.value.toString(), 'Ether')
+  
+                  this.props.createBid(name,message,time,price)
              }}>
                   <div className="form-group mr-sm-2">
                      <input
@@ -31,28 +24,28 @@ class BidMain extends Component{
                         type="text"
                         ref={(input) => { this.bidderName = input }}
                         className="form-control"
-                        placeholder="Bidder Name"
+                        placeholder="Name"
                         required />
                         <input
                         id="bidderDes"
                         type="text"
-                        ref={(input) => { this.bidderDes = input }}
+                        ref={(input) => { this.bidderMessage = input }}
                         className="form-control"
-                        placeholder="Bidder Description"
+                        placeholder="Description"
                         required />
                         <input
                         id="bidderTime"
-                        type="text"
+                        type="number"
                         ref={(input) => { this.bidderTime = input }}
                         className="form-control"
-                        placeholder="Bidder Time"
+                        placeholder="Time in days"
                         required />
                         <input
                         id="bidderPrice"
                         type="text"
                         ref={(input) => { this.bidderPrice = input }}
                         className="form-control"
-                        placeholder="Bidder Price"
+                        placeholder="Price"
                         required />
                   </div>          
                   <button type="submit" className="btn btn-primary">Bid</button>
@@ -62,23 +55,27 @@ class BidMain extends Component{
             <table className="table">
                 <thead>
                   <tr>    
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Owner</th>
+                  <th scope="col">#</th>
+                   <th scope="col">Name</th>
+                   <th scope="col">Message</th>
+                   <th scope="col">Price</th>
+                   <th scope="col">Time(days)</th>
+                   <th scope="col">Bidder</th>
                    </tr>
                 </thead>
-                <tbody id="workList">
-                  {this.props.bids.map((bid,key)=>{
+                
+            <tbody id="bidList">
+                  {this.props.bids.map((bid,key1)=>{
                     return(
-                      <tr key={key}>
-                        <td>{bid.name}</td>
+                      <tr key={key1}>
+                       <td scope="row">{bid.bid_id.toString()}</td>
+                        <td scope ="row">{bid.name}</td>
                         <td>{bid.message}</td>
-                        <td>{bid.time}</td>
-                        <td>{bid.price}</td>
-                        <td>{bid.owner}</td>
+                        <td>{window.web3.utils.fromWei(bid.price.toString(),'Ether')}</td>
+                        <td>{window.web3.utils.hexToNumber(bid.time)}</td>
+                        <td>{bid.bidder}</td>
                       </tr>
+
                      );
                    })}
                </tbody>
