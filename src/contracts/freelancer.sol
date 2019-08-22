@@ -41,7 +41,7 @@ contract freelancer{
         address payable bidder
 
         );
-    emit bidPurchased(
+    event bidPurchased(
         uint bid_id,
         string name,
         string message,
@@ -63,44 +63,35 @@ contract freelancer{
         
     }
 
-     function purchasebid(uint _id) public payable  {
+     function purchaseBid(uint _id) public payable  {
         //fetch the bid
         bid memory _bid = bids[_id];
         //fetch the owner 
         address payable _seller =_bid.bidder;
         // Make sure the product id is valid
-
-        //require (_product.id >0 && _product.id< productCount);
+        require (_bid.bid_id >0 && _bid.bid_id< bidCount);
         // enough ether
-         
-         require (msg.value >= _bid.bidder);
+        require (msg.value >= _bid.price);
          //product is not purchased
 
 
          //require (!_product.purchased);
 
          //seller is not buyer
-
-
          require (_seller!=msg.sender);
          
          
         //transfer ownership to the buyer
-        //_work.owner= msg.sender;
+        _bid.bidder= msg.sender;
          //mark as purchased
          //_product.purchased = true;
          //update the product
-         //products[_id]=_product;
+         bids[_id]=_bid;
          //pay the seller through ether
          address(_seller).transfer(msg.value);
          //trigger an event
 
-         emit bidPurchased(bidCount,_name,_message,_time,_price, msg.sender);
+         emit bidPurchased(bidCount,_bid.name,_bid.message,_bid.time,_bid.price, msg.sender);
 
-    }
-
-
-
-    
-    
+    }    
 }

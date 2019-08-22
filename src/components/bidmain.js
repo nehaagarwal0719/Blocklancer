@@ -74,6 +74,17 @@ class BidMain extends Component{
                         <td>{window.web3.utils.fromWei(bid.price.toString(),'Ether')}</td>
                         <td>{window.web3.utils.hexToNumber(bid.time)}</td>
                         <td>{bid.bidder}</td>
+                        <td> <button
+                             name={bid.bid_id}
+                             value={bid.price}
+                             onClick={(event)=>{
+                               console.log("clicked")
+                               
+                               this.props.purchaseBid(event.target.name,event.target.value)
+                              }}>
+                             Buy
+                             </button>
+                       </td>
                       </tr>
 
                      );
